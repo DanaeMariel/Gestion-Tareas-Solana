@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("Dzo7SjCHEytN8ngfnxwAP3FKcnYtBGaGqnu3gpkKXcxF");
+declare_id!("");
 
 #[program]
 pub mod gestion_tareas {
