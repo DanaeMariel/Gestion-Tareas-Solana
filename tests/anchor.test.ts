@@ -16,7 +16,7 @@ describe("Test", () => {
       })
       .signers([newAccountKp])
       .rpc();
-    console.log(`Use 'solana confirm -v ${txHash}' to see the logs`);
+    console.log(Use 'solana confirm -v ${txHash}' to see the logs);
 
     // Confirm transaction
     await pg.connection.confirmTransaction(txHash);

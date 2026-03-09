@@ -1,60 +1,132 @@
-# Biblioteca en Solana
+# Gestion-Tareas-Solana
 
-![banner](./images/banner-biblioteca.jpg)
+> Smart Contract en Solana para la gestión personal de tareas (CRUD) directamente en la blockchain.
 
-CRUD básico de un Solana Program desarrollado con Rust y Anchor desde el Solana Playground. 
+* * *
 
-Puedes comenzar dándole Fork a este repositorio (abajo te explicamos como 👇), **hemos preparado un entorno de codespaces listo para que no tengas que instalar nada**, solo déjate llevar por la fluidez de los ejercicios y temas desarrollados especialmente para ti. 
+## ¿Qué es Gestion-Tareas-Solana?
 
-Asegúrate de clonar este repositorio a tu cuenta usando el botón **`Fork`**.
+Gestion-Tareas-Solana es un programa desplegado en la **blockchain de Solana** que permite a cualquier usuario crear y gestionar su propia lista de tareas. Cada lista contiene tareas con su **descripción** y **estado** (completada/pendiente), almacenadas como un vector dinámico dentro de una cuenta PDA única.
 
-![fork](./images/fork.png)
+Desarrollado con **Rust** y el framework **Anchor** como parte del aprendizaje práctico de desarrollo en Solana.
 
-## Importando el proyecto 
+* * *
 
-Ya con el repositorio en tu cuenta lo siguiente que debes hacer copiar el `enlace de tu repositorio`, lo que se puede hacer directamente desdel navegador:
+## Instrucciones del Programa
 
-![repo](./images/repo.png)
-Posteriormente, lo uniremos con el siguiente enlace en nuestro navegador de preferencia:
+| Instrucción | Acción | Descripción |
+| :--- | :--- | :--- |
+| `crear_lista` | **CREATE** | Inicializa una nueva lista de tareas para el usuario |
+| `crear_tarea` | **CREATE** | Agrega una nueva tarea a la lista |
+| `leer_tareas` | **READ** | Lee los datos de la lista y todas sus tareas desde el client |
+| `actualizar_tarea` | **UPDATE** | Cambia la descripción y/o el estado de una tarea |
+| `eliminar_tarea` | **DELETE** | Elimina una tarea de la lista |
 
-```url
-https://beta.solpg.io/
-```
+* * *
 
-Lo que nos dará algo parecido a:
+## Estructura de Datos
 
-![url](./images/url.png)
+La lista de tareas se almacena en una cuenta PDA única para cada usuario, con los siguientes campos:
 
-Al pulsar enter seremos enviados al `Solana Playground` con nuestro proyecto abierto:
+```rust
+pub struct Lista {
+    pub owner: Pubkey,      // Wallet del propietario de la lista
+    pub nombre: String,     // "Mis Tareas", "Trabajo", etc.
+    pub tareas: Vec<Tarea>, // Vector dinámico con las tareas
+}
 
-![pg](./images/pg.png)
+pub struct Tarea {
+    pub descripcion: String, // "Estudiar Solana", "Comprar leche"
+    pub completada: bool,    // true = completada, false = pendiente
+}
 
-Para guardarlo solo damos clic en el boton `import` y asignamos un nombre:
+La dirección de cada cuenta Lista se deriva con las semillas:
 
-![import](./images/import.png)
+["lista", owner_wallet]
 
-## Preparacion del entorno
+Esto garantiza que solo el propietario de la wallet pueda acceder y modificar su lista de tareas.
 
-Primero conectaremos el entorno con la devnet, lo que tambien procederá a la creación de una wallet. Para eso daremos clic en donde dice **Not Conected**:
 
-![playground1](./images/playground1.png)
+Cómo Ejecutarlo
+1. Importar en Solana Playground
+Copia el enlace de tu repositorio y ábrelo en Solana Playground:
 
-Saldrá la siguiente ventana donde daremos en el botón **Continue**:
+text
+https://beta.solpg.io/github.com/DannanMariel/Gestion-Tareas-Solana
+Haz clic en Import y asigna un nombre.
 
-![wallet](./images/wallet.png)
+2. Conectar Wallet
+Haz clic en Not Connected (parte inferior izquierda) para conectarte a la Devnet y crear tu wallet de prueba.
 
-Como resultado se mostrará la siguiente información:
+Pide SOL de prueba en la terminal:
 
-![status](./images/status.png)
+bash
+solana airdrop 2
 
-* En verde: el estado de la conexión y el entorno al que se encuentra conectado
+3. Build & Deploy
+Clic en Build — espera la marca verde de compilación exitosa.
 
-* En amarillo: la la dirección de la wallet conectada
+Clic en Deploy — espera el mensaje "Deployment successful".
 
-* En azul: la cantidad de tokens en la wallet
+4. Ejecutar Pruebas
+En la terminal de SolPG escribe:
 
-> ℹ️ ¿Quieres ver el ejemplo de un "Hola Mundo" en Solana?. Da clic aquí: 👉 [Ver Ejemplo](https://github.com/WayLearnLatam/Solana-starter-kit/tree/1fc6349ba63375a3fe223d8d56911bc64765459b/build-deploy)
+bash
+run
+sto ejecuta client/client.ts que realiza el ciclo CRUD completo:
 
-> ℹ️ ¿Cuentas con una Wallet de [Phantom](https://phantom.com/) que deseas importar?, Da clic aquí para ver como hacerlo: 
+text
+SISTEMA DE GESTION DE TAREAS - OPERACIONES CRUD
 
-👉 [Como Importar una Wallet](https://github.com/WayLearnLatam/Solana-starter-kit/tree/1fc6349ba63375a3fe223d8d56911bc64765459b/import-key-a-playground)
+📍 PDA derivada para la lista: 5XJiKjAuMrCZvgv5qDkKDsNV
+
+--- 1. CREANDO LISTA ---
+ Transacción de creación exitosa. Hash: 4xKpJ7...
+
+--- 2. CREANDO TAREAS ---
+ Tarea "Estudiar Solana" creada.
+ Tarea "Hacer ejercicio" creada.
+ Tarea "Comprar leche" creada.
+
+--- 3. LEYENDO TAREAS ---
+ Datos extraídos de la PDA:
+   - Propietario: CEdMTr2c52JvKVfTiH3p9ihLP1
+   - Nombre de lista: MIS TAREAS
+   - Total tareas: 3
+   - Tarea 0: "Estudiar Solana" [✗]
+   - Tarea 1: "Hacer ejercicio" [✗]
+   - Tarea 2: "Comprar leche" [✗]
+
+--- 4. ACTUALIZANDO TAREA ---
+ Transacción de actualización exitosa.
+ Tarea 0 actualizada: "Estudiar Solana Avanzado" [✓]
+
+--- 5. ELIMINANDO TAREA ---
+  Transacción de eliminación exitosa.
+  Tarea 2 eliminada.
+¡Prueba del CRUD de Gestion-Tareas-Solana completada con éxito!
+
+Estructura del Proyecto
+Gestion-Tareas-Solana/
+├── programs/
+│   └── gestion-tareas/
+│       └── src/
+│           └── lib.rs          # Smart Contract (Rust + Anchor)
+├── client/
+│   └── client.ts                # Script de pruebas CRUD (TypeScript)
+├── tests/
+│   └── gestion-tareas.ts        # Tests unitarios
+├── images/                       # Imágenes del README
+└── README.md
+
+Tecnologías
+
+Herramienta	Uso
+Rust	Lógica del Smart Contract
+Anchor	Framework para desarrollo en Solana
+TypeScript	Cliente de pruebas e integración
+Solana Devnet	Red de pruebas para despliegue
+Solana Playground	IDE en el navegador
+
+Autor
+Desarrollado por DannanMariel
