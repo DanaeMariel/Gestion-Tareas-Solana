@@ -113,4 +113,4 @@ Gestion-Tareas-Solana/
 
 ## Autor
 
-Desarrollado por DannanMariel.
+Desarrollado por Danae Mariel.
