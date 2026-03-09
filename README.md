@@ -2,7 +2,7 @@
 
 > Smart Contract en Solana para la gestion personal de tareas (CRUD) directamente en la blockchain.
 
-![Banner del proyecto](./images/banner-biblioteca.jpg)
+![Banner del proyecto](./images/banner-tareas.jpg)
 
 ## Que es Gestion-Tareas-Solana
 
